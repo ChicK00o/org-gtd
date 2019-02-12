@@ -146,7 +146,7 @@
 
   ;; ;; WARNING!!! Following function call will drastically increase spacemacs launch time.
   ;; ;; This is at the end of my .emacs - so appointments are set up when Emacs starts
-  ;; (bh/org-agenda-to-appt)
+  (bh/org-agenda-to-appt)
 
   ;; Activate appointments so we get notifications,
   ;; but only run this when emacs is idle for 15 seconds
@@ -154,39 +154,7 @@
 
   ;; If we leave Emacs running overnight - reset the appointments one minute after midnight
   (run-at-time "24:01" nil 'bh/org-agenda-to-appt)
-
-  (add-hook 'org-agenda-mode-hook
-            '(lambda () (org-defkey org-agenda-mode-map "W" (lambda () (interactive) (setq bh/hide-scheduled-and-waiting-next-tasks t) (bh/widen))))
-            'append)
-
-  (add-hook 'org-agenda-mode-hook
-            '(lambda () (org-defkey org-agenda-mode-map "F" 'bh/restrict-to-file-or-follow))
-            'append)
-
-
-  (add-hook 'org-agenda-mode-hook
-            '(lambda () (org-defkey org-agenda-mode-map "N" 'bh/narrow-to-subtree))
-            'append)
-
-
-  (add-hook 'org-agenda-mode-hook
-            '(lambda () (org-defkey org-agenda-mode-map "U" 'bh/narrow-up-one-level))
-            'append)
-
-  (add-hook 'org-agenda-mode-hook
-            '(lambda () (org-defkey org-agenda-mode-map "P" 'bh/narrow-to-project))
-            'append)
-
   (defvar bh/project-list nil)
-
-
-  (add-hook 'org-agenda-mode-hook
-            '(lambda () (org-defkey org-agenda-mode-map "V" 'bh/view-next-project))
-            'append)
-
-  (add-hook 'org-agenda-mode-hook
-            '(lambda () (org-defkey org-agenda-mode-map "\C-c\C-x<" 'bh/set-agenda-restriction-lock))
-            'append)
 
 
   ;; Limit restriction lock highlighting to the headline only
@@ -257,7 +225,7 @@
                 ("MEETING" :foreground "forest green" :weight bold)
                 ("PHONE" :foreground "forest green" :weight bold))))
 
-  ;; (setq org-use-fast-todo-selection t)
+  (setq org-use-fast-todo-selection t)
 
   ;; This cycles through the todo states but skips setting timestamps and
   ;; entering notes which is very convenient when all you want to do is fix
