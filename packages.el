@@ -32,9 +32,7 @@
 
   (setq org-agenda-span 'day)
 
-  (if (boundp 'org-user-agenda-files)
-      (setq org-agenda-files org-user-agenda-files)
-    (setq org-agenda-files (quote ("~/git/org"))))
+  (setq org-agenda-files gtd/org-agenda-files)
 
   ;; Do not dim blocked tasks
   (setq org-agenda-dim-blocked-tasks nil)
@@ -154,7 +152,6 @@
 
   ;; If we leave Emacs running overnight - reset the appointments one minute after midnight
   (run-at-time "24:01" nil 'bh/org-agenda-to-appt)
-  (defvar bh/project-list nil)
 
 
   ;; Limit restriction lock highlighting to the headline only
@@ -190,7 +187,7 @@
   (setq org-agenda-skip-scheduled-if-deadline-is-shown  (quote repeated-after-deadline))
 
   (setq org-agenda-include-diary nil)
-  (setq org-agenda-diary-file "~/git/org/diary.org")
+  (setq org-agenda-diary-file gtd/org-agenda-diary-file)
   (setq org-agenda-insert-diary-extract-time t)
 
   ;; Include agenda archive files when searching for things
@@ -200,8 +197,7 @@
   (spacemacs|use-package-add-hook org
     :post-config
     (progn
-      (if (boundp 'org-user-default-notes-file) (setq org-default-notes-file org-user-default-notes-file)
-        (setq org-default-notes-file "~/git/org/refile.org"))
+      (setq org-default-notes-file gtd/org-default-notes-file)
       (require 'org-id)
 )))
 (defun gtd/post-init-org ()
@@ -325,7 +321,6 @@
   (setq bh/keep-clock-running nil)
 
 
-  (defvar bh/organization-task-id "e2fb68ed-2c63-4f32-9fa3-9ce17349191e")
   (add-hook 'org-clock-out-hook 'bh/clock-out-maybe 'append)
 
   (setq org-time-stamp-rounding-minutes (quote (1 1)))
@@ -366,7 +361,6 @@
 
   
 
-   (defvar bh/hide-scheduled-and-waiting-next-tasks t)
 
    (setq org-list-allow-alphabetical t)
 
