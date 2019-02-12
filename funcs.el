@@ -95,8 +95,7 @@ so change the default 'F' binding in the agenda to allow both"
         (org-with-point-at (bh/get-pom-from-agenda-restriction-or-point)
           (bh/narrow-to-org-project)
           (save-excursion
-            (bh/find-project-task)
-            (org-agenda-set-restriction-lock)))
+            (bh/find-project-task)))
         (org-agenda-redo)
         (beginning-of-buffer))
     (bh/narrow-to-org-project)
