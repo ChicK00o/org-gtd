@@ -1,8 +1,11 @@
 (defvar gtd/org-agenda-files (directory-files-recursively org-directory "\.org$")
-)
+  "Complete list of agenda files")
 
 (defvar gtd/org-default-notes-file (expand-file-name "refile.org" org-directory)
   "New Stuff collected in this file. All new notes come here first")
+
+(defvar gtd/org-default-someday-file (expand-file-name "someday.org" org-directory)
+  "Someday Stuff collected in this file. All new notes come here first")
 
 (defvar gtd/org-agenda-diary-file (expand-file-name "diary.org" org-journal-dir)
   "All agenda diary data is in this file")
@@ -33,22 +36,26 @@
 ;; meetings, and org-protocol
 (defvar gtd/org-capture-templates
   (quote (("t" "todo" entry (file gtd/org-default-notes-file)
-           "* TODO %?\n%U\n%a\n" :clock-in t :clock-resume t)
+           "* TODO %?\n%U\n%a\n" :clock-in t :clock-resume t :empty-lines-after 1)
           ("r" "respond" entry (file gtd/org-default-notes-file)
            "* NEXT Respond to %:from on %:subject\nSCHEDULED: %t\n%U\n%a\n" :clock-in t :clock-resume t :immediate-finish t)
           ("n" "note" entry (file gtd/org-default-notes-file)
-           "* %? :NOTE:\n%U\n%a\n" :clock-in t :clock-resume t)
+           "* %? :NOTE:\n%U\n%a\n" :clock-in t :clock-resume t :empty-lines-after 1)
           ("j" "Journal" entry (file+datetree gtd/org-agenda-diary-file)
-           "* %?\n%U\n" :clock-in t :clock-resume t)
+           "* %?\n%U\n" :clock-in t :clock-resume t :empty-lines-after 1)
           ("w" "org-protocol" entry (file gtd/org-default-notes-file)
-           "* TODO Review %c\n%U\n" :immediate-finish t)
+           "* TODO Review %c\n%U\n" :immediate-finish t :empty-lines-after 1)
           ("m" "Meeting" entry (file gtd/org-default-notes-file)
-           "* MEETING with %? :MEETING:\n%U" :clock-in t :clock-resume t)
+           "* MEETING with %? :MEETING:\n%U" :clock-in t :clock-resume t :empty-lines-after 1)
           ("p" "Phone call" entry (file gtd/org-default-notes-file)
-           "* PHONE %? :PHONE:\n%U" :clock-in t :clock-resume t)
+           "* PHONE %? :PHONE:\n%U" :clock-in t :clock-resume t :empty-lines-after 1)
           ("h" "Habit" entry (file gtd/org-default-notes-file)
-           "* NEXT %?\n%U\n%a\nSCHEDULED: %(format-time-string \"%<<%Y-%m-%d %a .+1d/3d>>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n")))
+           "* NEXT %?\n%U\n%a\nSCHEDULED: %(format-time-string \"%<<%Y-%m-%d %a .+1d/3d>>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n")
+          ("s" "SOMEDAY/MAYBE" entry (file+olp gtd/org-default-someday-file "Someday")
+           "* TODO %?\n%U\n%a\n" :clock-in t :clock-resume t :empty-lines-after 1)
+          ))
   "Capture templates for org-capture")
+
 
 ;; Tags with fast selection keys
 (defvar gtd/org-tag-alist (quote ((:startgroup)

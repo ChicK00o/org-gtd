@@ -28,8 +28,6 @@
      :defer t
      :config
      (progn
-       (use-package 'bbdb-com
-         :defer t)
        (define-key global-map (kbd "<f9> b") 'bbdb)
        (define-key global-map (kbd "<f9> p") 'bh/phone-call)
        ;; Phone capture template handling with BBDB lookup
@@ -104,7 +102,7 @@
                  ((org-agenda-overriding-header "Habits")
                   (org-agenda-sorting-strategy
                    '(todo-state-down effort-up category-keep))))
-                (" " "Agenda"
+                ("A" "Agenda"
                  ((agenda "" nil)
                   (tags "REFILE"
                         ((org-agenda-overriding-header "Tasks to Refile")
@@ -251,9 +249,6 @@
     :post-config
     (progn
       (setq org-default-notes-file gtd/org-default-notes-file)
-      (use-package 'org-id
-        :defer t
-        :commands org-id-find)
 )))
 (defun gtd/post-init-org ()
   (add-to-list 'auto-mode-alist '("\\.\\(org\\|org_archive\\|txt\\)$" . org-mode))
