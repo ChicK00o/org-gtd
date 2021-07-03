@@ -4,12 +4,12 @@
 #+CAPTION: logo
 
 # The maximum height of the logo should be 200 pixels.
-[[img/gtd.png]]
+# [[img/gtd.png]]
 
 * Table of Contents                                        :TOC_4_org:noexport:
- - [[Description][Description]]
- - [[Install][Install]]
- - [[Key bindings][Key bindings]]
+- [[Description][Description]]
+- [[Install][Install]]
+- [[Key bindings][Key bindings]]
 
 * Description
 This spacemacs layer is based on the web document "[[http://doc.norang.ca/org-mode.html][Org Mode - Organize Your Life In Plain Text!]]" by Bernt Hansen. AFAIK, his document is the most comprehensive tutorial you could find on the Internet. It is very helpful for those who want to learn org-mode for GTD.
