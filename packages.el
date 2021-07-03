@@ -381,8 +381,8 @@
   ;; (require 'ox-latex)
   ;; (require 'ox-ascii)
 
-  (setq org-ditaa-jar-path "~/git/org-mode/contrib/scripts/ditaa.jar")
-  (setq org-plantuml-jar-path "~/java/plantuml.jar")
+  (setq org-ditaa-jar-path "~/.emacs.d/private/gtd/ditaa.jar")
+  (setq org-plantuml-jar-path "~/.emacs.d/private/gtd/plantuml.jar")
 
   (add-hook 'org-babel-after-execute-hook 'bh/display-inline-images 'append)
 
