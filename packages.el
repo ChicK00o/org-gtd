@@ -251,15 +251,7 @@
 
   ;; ;; TODO Other todo keywords doesn't have appropriate faces yet. They should
   ;; ;; have faces similar to spacemacs defaults.
-  (setq org-todo-keyword-faces
-        (quote (("TODO" :foreground "red" :weight bold)
-                ("NEXT" :foreground "blue" :weight bold)
-                ("DONE" :foreground "forest green" :weight bold)
-                ("WAITING" :foreground "orange" :weight bold)
-                ("HOLD" :foreground "magenta" :weight bold)
-                ("CANCELLED" :foreground "forest green" :weight bold)
-                ("MEETING" :foreground "forest green" :weight bold)
-                ("PHONE" :foreground "forest green" :weight bold))))
+  (setq org-todo-keyword-faces gtd/org-todo-keyword-faces)
 
   (setq org-use-fast-todo-selection t)
 
