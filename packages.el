@@ -28,7 +28,8 @@
      :defer t
      :config
      (progn
-       (require 'bbdb-com)
+       (use-package 'bbdb-com
+         :defer t)
        (define-key global-map (kbd "<f9> b") 'bbdb)
        (define-key global-map (kbd "<f9> p") 'bh/phone-call)
        ;; Phone capture template handling with BBDB lookup
@@ -66,9 +67,23 @@
   (use-package boxquote
     :defer t))
 
-(defun gtd/post-init-org-agenda()
-  (require 'org-habit)
+(defun gtd/pre-init-org-agenda()
+  (use-package org-habit
+    :defer t
+    :commands org-is-habit-p)
+  )
 
+(defun gtd/pre-init-org-archive ()
+  (spacemacs|use-package-add-hook org-archive
+    :post-config
+    (progn
+      (setq org-archive-mark-done nil)
+      (setq org-archive-location "%s_archive::* Archived Tasks")
+      )
+    )
+  )
+
+(defun gtd/post-init-org-agenda()
 
   (setq org-agenda-span 'day)
 
@@ -158,8 +173,6 @@
                          (org-tags-match-list-sublevels nil))))
                  nil))))
 
-  
-
   (setq org-agenda-auto-exclude-function 'bh/org-auto-exclude-function)
 
   (setq org-agenda-clock-consistency-checks
@@ -176,7 +189,7 @@
   (setq org-agenda-log-mode-items (quote (closed state)))
 
   ;; For tag searches ignore tasks with scheduled and deadline dates
-  (setq org-agenda-tags-todo-honor-ignore-options t)
+  (setq org-agenda-tags-todo-honor-ignore-options gtd/org-agenda-tags-todo-honor-ignore-options)
 
 
   ;; Rebuild the reminders everytime the agenda is displayed
@@ -238,7 +251,9 @@
     :post-config
     (progn
       (setq org-default-notes-file gtd/org-default-notes-file)
-      (require 'org-id)
+      (use-package 'org-id
+        :defer t
+        :commands org-id-find)
 )))
 (defun gtd/post-init-org ()
   (add-to-list 'auto-mode-alist '("\\.\\(org\\|org_archive\\|txt\\)$" . org-mode))
@@ -269,7 +284,7 @@
                 ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
                 ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
 
-  (setq org-directory "~/git/org")
+  ;; (setq org-directory "~/git/org")
 
   ;; Capture templates for: TODO tasks, Notes, appointments, phone calls,
   ;; meetings, and org-protocol
@@ -352,33 +367,14 @@
   (setq org-global-properties (quote (("Effort_ALL" . "0:15 0:30 0:45 1:00 2:00 3:00 4:00 5:00 6:00 0:00")
                                       ("STYLE_ALL" . "habit"))))
   ;; Tags with fast selection keys
-  (setq org-tag-alist (quote ((:startgroup)
-                              ("@errand" . ?e)
-                              ("@office" . ?o)
-                              ("@home" . ?H)
-                              ("@farm" . ?f)
-                              (:endgroup)
-                              ("WAITING" . ?w)
-                              ("HOLD" . ?h)
-                              ("PERSONAL" . ?P)
-                              ("WORK" . ?W)
-                              ("FARM" . ?F)
-                              ("ORG" . ?O)
-                              ("NORANG" . ?N)
-                              ("crypt" . ?E)
-                              ("NOTE" . ?n)
-                              ("CANCELLED" . ?c)
-                              ("FLAGGED" . ??))))
+  (setq org-tag-alist gtd/org-tag-alist)
 
   ;; Allow setting single tags without the menu
-  (setq org-fast-tag-selection-single-key (quote expert))
+  (setq org-fast-tag-selection-single-key gtd/org-fast-tag-selection-single-key)
   ;; Disable the default org-mode stuck projects agenda view
   (setq org-stuck-projects (quote ("" nil nil "")))
 
-  
-
-
-   (setq org-list-allow-alphabetical t)
+  (setq org-list-allow-alphabetical t)
 
   ;; ;; Explicitly load required exporters
   ;; (require 'ox-html)
@@ -396,19 +392,7 @@
 
   (org-babel-do-load-languages
    (quote org-babel-load-languages)
-   (quote ((emacs-lisp . t)
-           (dot . t)
-           (ditaa . t)
-           (R . t)
-           (python . t)
-           (ruby . t)
-           (gnuplot . t)
-           (clojure . t)
-           (shell . t)
-           (ledger . t)
-           (org . t)
-           (plantuml . t)
-           (latex . t))))
+   gtd/org-babel-do-load-languages)
 
   ;; Do not prompt to confirm evaluation
   ;; This may be dangerous - make sure you understand the consequences

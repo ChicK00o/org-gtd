@@ -1,11 +1,8 @@
 (defun bh/org-auto-exclude-function (tag)
   "Automatic task exclusion in the agenda with / RET"
-  (and (cond
-        ((string= tag "hold")
-         t)
-        ((string= tag "farm")
-         t))
-       (concat "-" tag)))
+  (and
+   (loop for ctag in gtd/agenda-exclude-fast do (if (string= tag ctag ) (return t)))
+   (concat "-" tag)))
 
 
 ;; Erase all reminders and rebuilt reminders for today from the agenda
@@ -570,8 +567,8 @@ Skip project and sub-project tasks, habits, and loose non-project tasks."
           nil
         next-headline)))
 
-  (setq org-archive-mark-done nil)
-  (setq org-archive-location "%s_archive::* Archived Tasks")
+  ;; (setq org-archive-mark-done nil)
+  ;; (setq org-archive-location "%s_archive::* Archived Tasks")
 
   (defun bh/skip-non-archivable-tasks ()
     "Skip trees that are not available for archiving"
