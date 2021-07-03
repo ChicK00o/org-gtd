@@ -20,7 +20,47 @@
 ;; List of packages to exclude.
 (setq gtd-excluded-packages '())
 
+(when (not (spacemacs/system-is-mswindows))
+  (push 'bbdb gtd-packages))
 
+(defun gtd/init-bbdb()
+   (use-package bbdb
+     :defer t
+     :config
+     (progn
+       (require 'bbdb-com)
+       (define-key global-map (kbd "<f9> b") 'bbdb)
+       (define-key global-map (kbd "<f9> p") 'bh/phone-call)
+       ;; Phone capture template handling with BBDB lookup
+       ;; Adapted from code by Gregory J. Grubbs
+       (defun bh/phone-call ()
+         "Return name and company info for caller from bbdb lookup"
+         (interactive)
+         (let* (name rec caller)
+           (setq name (completing-read "Who is calling? "
+                                       (bbdb-hashtable)
+                                       'bbdb-completion-predicate
+                                       'confirm))
+           (when (> (length name) 0)
+             ;; Something was supplied - look it up in bbdb
+             (setq rec
+                   (or (first
+                        (or (bbdb-search (bbdb-records) name nil nil)
+                            (bbdb-search (bbdb-records) nil name nil)))
+                       name)))
+
+           ;; Build the bbdb link if we have a bbdb record, otherwise just return the name
+           (setq caller (cond ((and rec (vectorp rec))
+                               (let ((name (bbdb-record-name rec))
+                                     (company (bbdb-record-company rec)))
+                                 (concat "[[bbdb:"
+                                         name "]["
+                                         name "]]"
+                                         (when company
+                                           (concat " - " company)))))
+                              (rec)
+                              (t "NameOfCaller")))
+           (insert caller))))))
 
 (defun gtd/init-boxquote()
   (use-package boxquote
