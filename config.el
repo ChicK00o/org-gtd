@@ -10,7 +10,8 @@
 (defvar gtd/org-agenda-diary-file (expand-file-name "diary.org" org-journal-dir)
   "All agenda diary data is in this file")
 
-(defvar bh/organization-task-id "e2fb68ed-2c63-4f32-9fa3-9ce17349191e"
+;; On the task to use as default using M-x command call org-id-get-create, then copy paste the value generated here.
+(defvar bh/organization-task-id "2C0326E7-6DFD-418B-B34B-94A778D3558B"
   "org task id")
 
 (defvar bh/project-list nil
