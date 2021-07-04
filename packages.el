@@ -102,7 +102,7 @@
                  ((org-agenda-overriding-header "Habits")
                   (org-agenda-sorting-strategy
                    '(todo-state-down effort-up category-keep))))
-                ("A" "Agenda"
+                ("o" "Agenda"
                  ((agenda "" nil)
                   (tags "REFILE"
                         ((org-agenda-overriding-header "Tasks to Refile")

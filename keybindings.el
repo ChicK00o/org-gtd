@@ -35,6 +35,7 @@
 (global-set-key (kbd "C-<f11>") 'org-clock-in)
 ;; (global-set-key (kbd "C-s-<f12>") 'bh/save-then-publish)
 (global-set-key (kbd "C-c c") 'org-capture)
+(global-set-key (kbd "<f7>") 'org-capture)
 (global-set-key (kbd "<f9> p") 'bh/phone-call)
 (global-set-key (kbd "<C-f6>") '(lambda () (interactive) (bookmark-set "SAVED")))
 (global-set-key (kbd "<f6>") '(lambda () (interactive) (bookmark-jump "SAVED")))
@@ -48,6 +49,11 @@
 (evil-leader/set-key "oO" 'bh/punch-out)
 (evil-leader/set-key "ob" 'org-switchb)
 
+;; This stand for <leader> m + key combo (keys for major mode)
+(evil-leader/set-key-for-mode 'org-agenda-mode "ob" 'org-agenda-bulk-action)
+(evil-leader/set-key-for-mode 'org-agenda-mode "or" 'org-agenda-refile)
+(evil-leader/set-key-for-mode 'org-mode "r" 'org-refile)
+
 (add-hook 'org-agenda-mode-hook
           '(lambda ()
              (org-defkey org-agenda-mode-map "W" (lambda () (interactive) (setq bh/hide-scheduled-and-waiting-next-tasks t) (bh/widen)))
@@ -57,5 +63,12 @@
              (org-defkey org-agenda-mode-map "P" 'bh/narrow-to-project)
              (org-defkey org-agenda-mode-map "V" 'bh/view-next-project)
              (org-defkey org-agenda-mode-map "\C-c\C-x<" 'bh/set-agenda-restriction-lock)
+             (org-defkey org-agenda-mode-map (kbd "<f4>") 'org-agenda-refile)
              )
           'append)
+(add-hook 'org-mode-hook
+          '(lamda ()
+                  (org-defkey org-mode-map (kbd "<f4>") 'org-refile)
+                  )
+          'append
+          )
