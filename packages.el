@@ -401,6 +401,14 @@
   ;; Android phone
   (setq org-startup-with-inline-images nil)
 
+  (advice-add 'org-refile :after (lambda (&rest _) (org-save-all-org-buffers)))
+  (advice-add 'org-agenda-refile :after (lambda (&rest _) (org-save-all-org-buffers)))
+  (advice-add 'org-agenda-bulk-action :after (lambda (&rest _) (org-save-all-org-buffers)))
+  (advice-add 'org-todo :after (lambda (&rest _) (org-save-all-org-buffers)))
+  (advice-add 'org-capture :after (lambda (&rest _) (org-save-all-org-buffers)))
+
+  (add-hook 'auto-save-hook 'org-save-all-org-buffers)
+
   ;; ;; experimenting with docbook exports - not finished
   ;; (setq org-export-docbook-xsl-fo-proc-command "fop %s %s")
   ;; (setq org-export-docbook-xslt-proc-command "xsltproc --output %s /usr/share/xml/docbook/stylesheet/nwalsh/fo/docbook.xsl %s")

@@ -42,6 +42,7 @@
 (global-set-key (kbd "C-<f9>") 'previous-buffer)
 (global-set-key (kbd "C-<f10>") 'next-buffer)
 (global-set-key (kbd "<f9> S") 'org-save-all-org-buffers)
+(global-set-key (kbd "<f3>") 'org-save-all-org-buffers)
 
 (evil-leader/set-key "oc" 'org-capture)
 (evil-leader/set-key "oa" 'org-agenda)
