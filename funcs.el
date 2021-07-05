@@ -598,3 +598,7 @@ Skip project and sub-project tasks, habits, and loose non-project tasks."
   (condition-case nil
       (org-display-inline-images)
     (error nil)))
+
+(defun bh/org-clock-select-task ()
+  (interactive)
+  (org-clock-select-task))

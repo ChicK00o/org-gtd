@@ -43,12 +43,14 @@
 (global-set-key (kbd "C-<f10>") 'next-buffer)
 (global-set-key (kbd "<f9> S") 'org-save-all-org-buffers)
 (global-set-key (kbd "<f3>") 'org-save-all-org-buffers)
+(global-set-key (kbd "<f2>") 'bh/org-clock-select-task)
 
 (evil-leader/set-key "oc" 'org-capture)
 (evil-leader/set-key "oa" 'org-agenda)
 (evil-leader/set-key "oI" 'bh/punch-in)
 (evil-leader/set-key "oO" 'bh/punch-out)
 (evil-leader/set-key "ob" 'org-switchb)
+(evil-leader/set-key "ot" 'bh/org-clock-select-task)
 
 ;; This stand for <leader> m + key combo (keys for major mode)
 (evil-leader/set-key-for-mode 'org-agenda-mode "ob" 'org-agenda-bulk-action)
@@ -68,8 +70,8 @@
              )
           'append)
 (add-hook 'org-mode-hook
-          '(lamda ()
-                  (org-defkey org-mode-map (kbd "<f4>") 'org-refile)
-                  )
+          '(lambda ()
+             (org-defkey org-mode-map (kbd "<f4>") 'org-refile)
+             )
           'append
           )
