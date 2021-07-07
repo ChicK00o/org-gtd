@@ -1,3 +1,7 @@
+
+;;; Forth File to be loaded Layers -> Package -> Funcs -> Config -> Keybinding
+
+
 (defvar gtd/org-agenda-files (directory-files-recursively org-directory "\.org$")
   "Complete list of agenda files")
 
@@ -54,6 +58,8 @@
            "* NEXT %?\n%U\n%a\nSCHEDULED: %(format-time-string \"%<<%Y-%m-%d %a .+1d/3d>>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n")
           ("s" "SOMEDAY/MAYBE" entry (file+olp gtd/org-default-someday-file "Someday")
            "* TODO %?\n%U\n%a\n" :clock-in t :clock-resume t :empty-lines-after 1)
+          ("c" "Slack" entry (file gtd/org-default-notes-file)
+           "* SLACK time %?\n%U" :clock-in t :clock-resume t :empty-lines-after 1)
           ))
   "Capture templates for org-capture")
 

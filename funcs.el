@@ -1,3 +1,8 @@
+
+;;; Thrid File to be loaded Layers -> Package -> Funcs -> Config -> Keybinding
+
+(when (configuration-layer/package-used-p 'gtd)
+
 (defun bh/org-auto-exclude-function (tag)
   "Automatic task exclusion in the agenda with / RET"
   (and
@@ -602,3 +607,4 @@ Skip project and sub-project tasks, habits, and loose non-project tasks."
 (defun bh/org-clock-select-task ()
   (interactive)
   (org-clock-select-task))
+)

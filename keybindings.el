@@ -1,4 +1,7 @@
 
+;;; Fifth File to be loaded Layers -> Package -> Funcs -> Config -> Keybinding
+;; This file needs to be independent of any pacakge
+
 (define-key global-map (kbd "<f9> r") 'boxquote-region)
 (define-key global-map (kbd "<f9> f") 'boxquote-insert-file)
 
