@@ -58,7 +58,7 @@
 ;; This stand for <leader> m + key combo (keys for major mode)
 (evil-leader/set-key-for-mode 'org-agenda-mode "ob" 'org-agenda-bulk-action)
 (evil-leader/set-key-for-mode 'org-agenda-mode "or" 'org-agenda-refile)
-(evil-leader/set-key-for-mode 'org-mode "r" 'org-refile)
+(evil-leader/set-key-for-mode 'org-mode "mm" 'org-refile)
 
 (add-hook 'org-agenda-mode-hook
           '(lambda ()

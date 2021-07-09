@@ -232,14 +232,19 @@
 
   ;; =TODO= state keywords and colour settings:
   (setq org-todo-keywords
-        (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
+        (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
                 (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING"))))
 
   ;; ;; TODO Other todo keywords doesn't have appropriate faces yet. They should
   ;; ;; have faces similar to spacemacs defaults.
   (setq org-todo-keyword-faces gtd/org-todo-keyword-faces)
 
-  (setq org-use-fast-todo-selection t)
+  (setq
+   org-use-fast-todo-selection t
+   org-log-states-order-reversed t
+   org-log-into-drawer t
+   org-reverse-note-order t
+   )
 
   ;; This cycles through the todo states but skips setting timestamps and
   ;; entering notes which is very convenient when all you want to do is fix
