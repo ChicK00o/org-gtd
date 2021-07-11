@@ -14,6 +14,8 @@
 
 (defconst gtd-packages
     '(
+      (vulpea
+       :location (recipe :fetcher github :repo "d12frosted/vulpea" :branch "feature/org-roam-v2"))
       org
       org-agenda
       boxquote
@@ -36,6 +38,46 @@
 ;;   ;; Code
 ;;   )
 
+(defun gtd/pre-init-vulpea()
+  (use-package vulpea
+    :ensure t
+    :config
+    (progn
+      (spacemacs/declare-prefix "on" "vulpea...")
+      (spacemacs/declare-prefix "ond" "by date...")
+      (spacemacs/set-leader-keys
+        "ondd" 'vulpea-dailies-date
+        "ondt" 'vulpea-dailies-today
+        "ondn" 'vulpea-dailies-next
+        "ondp" 'vulpea-dailies-prev
+        "onf" 'vulpea-find
+        "onF" 'vulpea-find-backlink
+        "oni" 'vulpea-insert
+        "ont" 'vulpea-tags-add
+        "onT" 'vulpea-tags-delete
+        "ona" 'vulpea-alias-add
+        "onA" 'vulpea-alias-delete
+        "ool" 'litnotes)
+    )
+    :init
+    (add-hook 'before-save-hook #'vulpea-pre-save-hook)
+    (add-to-list 'window-buffer-change-functions
+                 #'vulpea-setup-buffer)
+    (add-hook 'vulpea-insert-handle-functions
+              #'vulpea-insert-handle)
+    (setq-default
+     vulpea-find-default-filter
+     (lambda (note)
+       (= (vulpea-note-level note) 0))
+     vulpea-insert-default-filter
+     (lambda (note)
+       (= (vulpea-note-level note) 0))))
+  )
+
+(defun gtd/init-vulpea()
+  (use-package s
+    :ensure t)
+  )
 
 (defun gtd/init-boxquote()
   (use-package boxquote
@@ -61,7 +103,8 @@
 
   (setq org-agenda-span 'day)
 
-  (setq org-agenda-files gtd/org-agenda-files)
+  ;; (setq org-agenda-files gtd/org-agenda-files)
+  (advice-add 'org-agenda :before #'vulpea-agenda-files-update)
 
   ;; Do not dim blocked tasks
   (setq org-agenda-dim-blocked-tasks nil)
@@ -70,15 +113,23 @@
   (setq org-agenda-compact-blocks t)
 
   ;; Custom agenda command definitions
+
   (setq org-agenda-custom-commands
-        (quote (("N" "Notes" tags "NOTE"
-                 ((org-agenda-overriding-header "Notes")
-                  (org-tags-match-list-sublevels t)))
-                ("h" "Habits" tags-todo "STYLE=\"habit\""
-                 ((org-agenda-overriding-header "Habits")
-                  (org-agenda-sorting-strategy
-                   '(todo-state-down effort-up category-keep))))
-                ("o" "Agenda"
+        `(
+          ("k" "V-Agenda"
+           (,vulpea-agenda-cmd-refile
+            ,vulpea-agenda-cmd-today
+            ,vulpea-agenda-cmd-focus
+            ,vulpea-agenda-cmd-waiting)
+           ((org-agenda-buffer-name vulpea-agenda-main-buffer-name)))
+          ("N" "Notes" tags "NOTE"
+           ((org-agenda-overriding-header "Notes")
+            (org-tags-match-list-sublevels t)))
+          ("h" "Habits" tags-todo "STYLE=\"habit\""
+           ((org-agenda-overriding-header "Habits")
+            (org-agenda-sorting-strategy
+             '(todo-state-down effort-up category-keep))))
+          ("o" "Agenda"
                  ((agenda "" nil)
                   (tags "REFILE"
                         ((org-agenda-overriding-header "Tasks to Refile")
@@ -145,7 +196,8 @@
                         ((org-agenda-overriding-header "Tasks to Archive")
                          (org-agenda-skip-function 'bh/skip-non-archivable-tasks)
                          (org-tags-match-list-sublevels nil))))
-                 nil))))
+                 nil)
+          ))
 
   (setq org-agenda-auto-exclude-function 'bh/org-auto-exclude-function)
 
@@ -220,13 +272,22 @@
   ;; Include agenda archive files when searching for things
   (setq org-agenda-text-search-extra-files (quote (agenda-archives))))
 
-(defun gtd/pre-init-org ()
-  (spacemacs|use-package-add-hook org
-    :post-config
-    (progn
-      (setq org-default-notes-file gtd/org-default-notes-file)
-)))
+
+;; (defun gtd/pre-init-org ()
+;;   (spacemacs|use-package-add-hook org
+;;     :post-config
+;;     (progn
+;;       (setq org-default-notes-file gtd/org-default-notes-file)
+;; )))
+
 (defun gtd/post-init-org ()
+
+  (use-package org-id
+    :defer t
+    :init
+    (add-hook 'before-save-hook #'vulpea-id-auto-assign)
+    (add-hook 'org-capture-prepare-finalize-hook #'org-id-get-create))
+
   (add-to-list 'auto-mode-alist '("\\.\\(org\\|org_archive\\|txt\\)$" . org-mode))
 
 
@@ -240,10 +301,20 @@
   (setq org-todo-keyword-faces gtd/org-todo-keyword-faces)
 
   (setq
+   ;; use fast todo selection
    org-use-fast-todo-selection t
    org-log-states-order-reversed t
+   ;; use drawer for state changes
    org-log-into-drawer t
    org-reverse-note-order t
+   org-tag-persistent-alist '(("FOCUS" . ?f)
+                              ("PROJECT" . ?p))
+   org-use-tag-inheritance t
+   org-tags-exclude-from-inheritance '("project"
+                                       "litnotes"
+                                       "people")
+   ;; block parent until children are done
+   org-enforce-todo-dependencies t
    )
 
   ;; This cycles through the todo states but skips setting timestamps and
@@ -255,7 +326,7 @@
         (quote (("CANCELLED" ("CANCELLED" . t))
                 ("WAITING" ("WAITING" . t))
                 ("HOLD" ("WAITING") ("HOLD" . t))
-                (done ("WAITING") ("HOLD"))
+                (done ("WAITING") ("HOLD") ("FOCUS"))
                 ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
                 ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
                 ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
@@ -295,7 +366,7 @@
 
 ;;;; Refile settings
   ;; Exclude DONE state tasks from refile targets
-  (setq org-refile-target-verify-function 'bh/verify-refile-target)
+  (setq org-refile-target-verify-function #'vulpea-refile-verify-target)
 
   ;; Show lot of clocking history so it's easy to pick items off the C-F11 list
   (setq org-clock-history-length 23)
@@ -384,7 +455,37 @@
   (advice-add 'org-todo :after (lambda (&rest _) (org-save-all-org-buffers)))
   (advice-add 'org-capture :after (lambda (&rest _) (org-save-all-org-buffers)))
 
-  (add-hook 'auto-save-hook 'org-save-all-org-buffers)
+  ;; (add-hook 'auto-save-hook 'org-save-all-org-buffers)
+
+  ;;; Custom setup from d12frosted vulpea library and using org-roam-v2
+
+  (setq org-agenda-prefix-format
+        '((agenda . " %i %-12(vulpea-agenda-category 12)%?-12t% s")
+          (todo . " %i %-12(vulpea-agenda-category 12) ")
+          (tags . " %i %-12(vulpea-agenda-category 12) ")
+          (search . " %i %-12(vulpea-agenda-category 12) ")))
+
+  ;; (add-to-list 'org-tags-exclude-from-inheritance '("project" "litnotes" "people"))
+  (add-hook 'find-file-hook #'vulpea-project-update-tag)
+  (add-hook 'before-save-hook #'vulpea-project-update-tag)
+  ;; (advise-add 'org-agenda :before #'vulpea-agenda-files-update)
+
+
+  ;; avoid noisy `org-check-agenda-file'
+  (advice-add #'org-check-agenda-file
+              :around
+              #'vulpea-check-agenda-file)
+
+  ;; (add-hook 'before-save-hook #'+org-auto-id-add-to-headlines-in-file)
+
+  ;; open directory links in `dired'
+  (add-to-list 'org-file-apps '(directory . emacs))
+
+  ;; open files in the same window
+  (add-to-list 'org-link-frame-setup '(file . find-file))
+  (setq org-indirect-buffer-display 'current-window)
+
+  (setq org-directory vulpea-directory)
 
   )
 

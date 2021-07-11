@@ -49,7 +49,9 @@
 (global-set-key (kbd "<f2>") 'bh/org-clock-select-task)
 
 (evil-leader/set-key "oc" 'org-capture)
-(evil-leader/set-key "oa" 'org-agenda)
+(evil-leader/set-key "oA" 'org-agenda)
+(evil-leader/set-key "oa" 'vulpea-agenda-main)
+(evil-leader/set-key "op" 'vulpea-agenda-person)
 (evil-leader/set-key "oI" 'bh/punch-in)
 (evil-leader/set-key "oO" 'bh/punch-out)
 (evil-leader/set-key "ob" 'org-switchb)
