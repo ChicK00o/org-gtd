@@ -61,6 +61,10 @@
 (evil-leader/set-key-for-mode 'org-agenda-mode "ob" 'org-agenda-bulk-action)
 (evil-leader/set-key-for-mode 'org-agenda-mode "or" 'org-agenda-refile)
 (evil-leader/set-key-for-mode 'org-mode "mm" 'org-refile)
+(evil-leader/set-key-for-mode 'org-mode "vt" 'vulpea-tags-add)
+(evil-leader/set-key-for-mode 'org-mode "va" 'vulpea-alias-add)
+(evil-leader/set-key-for-mode 'org-mode "vi" 'vulpea-insert)
+(evil-leader/set-key-for-mode 'org-mode "vf" 'vulpea-find)
 
 (add-hook 'org-agenda-mode-hook
           '(lambda ()

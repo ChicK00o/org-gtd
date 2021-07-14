@@ -104,7 +104,6 @@
   (setq org-agenda-span 'day)
 
   ;; (setq org-agenda-files gtd/org-agenda-files)
-  (advice-add 'org-agenda :before #'vulpea-agenda-files-update)
 
   ;; Do not dim blocked tasks
   (setq org-agenda-dim-blocked-tasks nil)
@@ -341,14 +340,21 @@
   (add-hook 'org-clock-out-hook 'bh/remove-empty-drawer-on-clock-out 'append)
 
   ;; Targets include this file and any file contributing to the agenda - up to 9 levels deep
-  (setq org-refile-targets (quote ((nil :maxlevel . 9)
-                                   (org-agenda-files :maxlevel . 9))))
+  ;; (setq org-refile-targets '((nil :maxlevel . 9)
+                             ;; (org-agenda-files :maxlevel . 9)))
+
+  (setq org-refile-targets (append '((gtd/org-default-notes-file :maxlevel . 4))
+                                   (->>
+                                    (directory-files vulpea-directory nil ".org")
+                                    (--remove (s-starts-with? "." it))
+                                    (--map (format "%s/%s" vulpea-directory it))
+                                    (--map `(,it :maxlevel . 4)))))
 
   ;; Use full outline paths for refile targets - we file directly with IDO
-  (setq org-refile-use-outline-path t)
+  (setq org-refile-use-outline-path 'file)
 
-  ;; ;; Targets complete directly with IDO
-  ;; (setq org-outline-path-complete-in-steps nil)
+  ;; Targets complete directly with IDO
+  (setq org-outline-path-complete-in-steps nil)
 
   ;; Allow refile to create parent tasks with confirmation
   (setq org-refile-allow-creating-parent-nodes (quote confirm))
@@ -468,7 +474,7 @@
   ;; (add-to-list 'org-tags-exclude-from-inheritance '("project" "litnotes" "people"))
   (add-hook 'find-file-hook #'vulpea-project-update-tag)
   (add-hook 'before-save-hook #'vulpea-project-update-tag)
-  ;; (advise-add 'org-agenda :before #'vulpea-agenda-files-update)
+  (advice-add 'org-agenda :before #'vulpea-agenda-files-update)
 
 
   ;; avoid noisy `org-check-agenda-file'
