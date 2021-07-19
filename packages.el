@@ -15,7 +15,7 @@
 (defconst gtd-packages
     '(
       (vulpea
-       :location (recipe :fetcher github :repo "d12frosted/vulpea" :branch "feature/org-roam-v2"))
+       :location (recipe :fetcher github :repo "d12frosted/vulpea"))
       org
       org-agenda
       boxquote
@@ -455,11 +455,11 @@
   (setq org-startup-with-inline-images nil)
 
   ;; Adding hooks to save all org buffers after some changes
-  (advice-add 'org-refile :after (lambda (&rest _) (org-save-all-org-buffers)))
-  (advice-add 'org-agenda-refile :after (lambda (&rest _) (org-save-all-org-buffers)))
-  (advice-add 'org-agenda-bulk-action :after (lambda (&rest _) (org-save-all-org-buffers)))
-  (advice-add 'org-todo :after (lambda (&rest _) (org-save-all-org-buffers)))
-  (advice-add 'org-capture :after (lambda (&rest _) (org-save-all-org-buffers)))
+  ;; (advice-add 'org-refile :after (lambda (&rest _) (org-save-all-org-buffers)))
+  ;; (advice-add 'org-agenda-refile :after (lambda (&rest _) (org-save-all-org-buffers)))
+  ;; (advice-add 'org-agenda-bulk-action :after (lambda (&rest _) (org-save-all-org-buffers)))
+  ;; (advice-add 'org-todo :after (lambda (&rest _) (org-save-all-org-buffers)))
+  ;; (advice-add 'org-capture :after (lambda (&rest _) (org-save-all-org-buffers)))
 
   ;; (add-hook 'auto-save-hook 'org-save-all-org-buffers)
 
